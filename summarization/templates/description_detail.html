@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description Detail</title>
+</head>
+<body>
+    <h2>Description Detail</h2>
+    {% if description %}
+        <p><strong>ID:</strong> {{ description.work_program_id }}</p>
+        <p><strong>Description:</strong> {{ description.description_text }}</p>
+    {% else %}
+        <p>Description not found.</p>
+    {% endif %}
+</body>
+</html>

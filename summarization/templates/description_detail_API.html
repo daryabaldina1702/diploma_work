@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Description Detail</title>
+</head>
+<body>
+    <h2>Описание рабочей программы из API конструктора</h2>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="description_id">Введите ID рабочей программы:</label>
+        <input type="text" id="description_id" name="description_id">
+        <button type="submit">Отправить</button>
+    </form>
+
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% elif description %}
+        <p>{{ description }}</p>
+    {% endif %}
+</body>
+</html>

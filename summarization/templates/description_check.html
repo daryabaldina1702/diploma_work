@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка описания программы</title>
+</head>
+<body>
+    <h2>Проверка наличия описания программы</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="work_program_id">ID программы:</label>
+        <input type="text" id="work_program_id" name="work_program_id">
+        <button type="submit">Проверить</button>
+    </form>
+    {% if description_exists is not None %}
+        {% if description_exists %}
+            <p>Описание программы найдено</p>
+        {% else %}
+            <p>Описание программы отсутствует</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
