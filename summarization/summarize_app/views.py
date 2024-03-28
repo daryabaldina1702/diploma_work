@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from .models import Description
+from .models import Description, Summary_text
 from django.http import HttpResponse
-from .forms import ProgramIdForm
-from django.views.generic import ListView, CreateView
+from .forms import ProgramIdForm, SummarizationForm
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 import requests
 import json
+from transformers import AutoTokenizer, T5ForConditionalGeneration
+
 
 
 # функция, которая проверяет, что описание есть в БД
@@ -86,12 +88,83 @@ def get_and_save_description_by_id(request):
     
     return render(request, 'description_detail_API.html', {'description': description_text})
 
-
-
-# функция, которая собирает статистику по БД
 # обновляет описание (руками)
-# функция, которая изменяет описание, если оно изменилось по API, а если нет, то оставляет таким же
+class UpdateDescription(UpdateView):
+    model = Description
+    fields = ['description_text']
+    template_name = 'update_description.html'
+    success_url = '/main'
+
 # удаляет описание по id
+class DeleteDescription(DeleteView):
+    model = Description
+    template_name = 'del_description.html'
+    success_url = '/main'
+
 # функция, которая выдает реферированные тексты + позволяет добавлять параметры
+def summarize_text(request):
+    summary = None
+    description_text = None
+    if request.method == 'POST':
+        form = SummarizationForm(request.POST) 
+        if form.is_valid():
+            #полученные гиперпараметры из формы
+            max_length_from_user = form.cleaned_data['max_length']
+            special_token = form.cleaned_data['special_token']
+            truncation_from_user = form.cleaned_data['truncation']
+            
+            # Получаем ID описания из формы
+            description_id = form.cleaned_data['description_id']
+
+            try:
+                #проверяем, есть ли в базе реферированный текст
+                sum_description = Summary_text.objects.get(wp_id=description_id)
+                summary = sum_description.summirize_text
+            except Summary_text.DoesNotExist:
+                # Применяем модель для суммаризации текста
+                model_name = "IlyaGusev/rut5_base_headline_gen_telegram"
+                tokenizer = AutoTokenizer.from_pretrained(model_name)
+                model = T5ForConditionalGeneration.from_pretrained(model_name)
+
+                #гиперпараметры
+                max_length= max_length_from_user if max_length_from_user else 600
+                add_special_tokens = True if special_token else False
+                truncation = True if truncation_from_user else False
+                
+                #достаем описание 
+                try:
+                    description = Description.objects.get(work_program_id=description_id)
+                    description_text = description.description_text
+                except Description.DoesNotExist:
+                    return render(request, 'summarization.html', {'form': form,'error_msg': 'Описания не существует'})
+
+                input_ids = tokenizer(
+                    [description_text],
+                    max_length=max_length,
+                    add_special_tokens=add_special_tokens,
+                    padding="max_length",
+                    truncation=truncation,
+                    return_tensors="pt"
+                )["input_ids"]
+
+                output_ids = model.generate(
+                    input_ids=input_ids
+                )[0]
+
+                summary = tokenizer.decode(output_ids, skip_special_tokens=True)
+
+                # Создаем и сохраняем объект Summary_text в базу данных
+                summary_object = Summary_text(summirize_text=summary, wp_id = description)
+                summary_object.save()
+
+    else:
+        form = SummarizationForm()
+
+    return render(request, 'summarization.html', {'form': form,'summary': summary})
+
+
+
+
+# функция, которая изменяет описание, если оно изменилось по API, а если нет, то оставляет таким же
 # функция, которая добавляет оценку тексту
-# функция, которая заменяет оригинальный текс описания на реферированный текст
+# функция, которая заменяет оригинальный текст описания на реферированный текст

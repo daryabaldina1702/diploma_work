@@ -13,14 +13,14 @@ class Editor(models.Model):
     work_program_id = models.ForeignKey(Description, on_delete = models.CASCADE)
 
 class Summary_text(models.Model):
-    summarization_id = models.CharField(max_length = 100)
-    summirize_text = models.TimeField()
-    work_program_id = models.ForeignKey(Description, on_delete = models.CASCADE)
+    summarization_id = models.AutoField(primary_key=True)
+    summirize_text = models.TextField()
+    wp_id = models.ForeignKey(Description, on_delete = models.CASCADE, db_column='wp_id')
 
 
 class Rating(models.Model):
     rating_id = models.AutoField(primary_key=True)
     rating_score = models.BooleanField()
-    comment_text = models.TimeField()
+    comment_text = models.TextField()
     author = models.CharField(max_length = 100)
     summarization_id = models.ForeignKey(Summary_text, on_delete = models.CASCADE)

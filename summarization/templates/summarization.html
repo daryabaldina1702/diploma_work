@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summarization Form</title>
+</head>
+<body>
+    <h1>Реферирование текстов</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+    {% if summary %}
+    <h2>Модифицированный текст:</h2>
+    <p>{{ summary }}</p>
+    {% endif %}
+    {% if error_msg %}
+    <p>{{ error_msg }}</p>
+    {% endif %}
+</body>
+</html>
