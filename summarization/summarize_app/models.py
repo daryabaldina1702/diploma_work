@@ -14,7 +14,7 @@ class Editor(models.Model):
 
 class Summary_text(models.Model):
     summarization_id = models.AutoField(primary_key=True)
-    summirize_text = models.TextField()
+    summarize_text = models.TextField()
     wp_id = models.ForeignKey(Description, on_delete = models.CASCADE, db_column='wp_id')
 
 
@@ -23,4 +23,4 @@ class Rating(models.Model):
     rating_score = models.BooleanField()
     comment_text = models.TextField()
     author = models.CharField(max_length = 100)
-    summarization_id = models.ForeignKey(Summary_text, on_delete = models.CASCADE)
+    summarization_id = models.ForeignKey(Summary_text, on_delete = models.CASCADE, db_column='summarization_id')

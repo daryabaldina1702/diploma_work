@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список описаний</title>
+</head>
+<body>
+    <h2>Список описаний</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>username</th>
+                <th>last_name</th>
+                <th>first_name</th>
+                <th>email</th>
+                <th>work_program_id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for editors in object_list %}
+            <tr>
+                <td>{{ description.username }}</td>
+                <td>{{ description.last_name }}</td>
+                <td>{{ description.first_name }}</td>
+                <td>{{ description.email }}</td>
+                <td>{{ description.work_program_id }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

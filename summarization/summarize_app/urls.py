@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import check_description, DescriptionList, description_detail, DescriptionCreate, get_and_save_description_by_id,\
-UpdateDescription, DeleteDescription, summarize_text
+UpdateDescription, DeleteDescription, summarize_text, RatingCreateView, program_editors
 
 urlpatterns = [
     path('main/', check_description),
@@ -10,5 +10,7 @@ urlpatterns = [
     path('API/description/',  get_and_save_description_by_id),
     path('description/update/<int:pk>', UpdateDescription.as_view()),
     path("description/delete/<int:pk>", DeleteDescription.as_view()),
-    path('summarize/',  summarize_text)
+    path('summarize/',  summarize_text),
+    path('rating/', RatingCreateView.as_view()),
+    path('description/editors/<int:work_program_id>', program_editors),
 ]

@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Description, Summary_text
+from django.shortcuts import render, get_object_or_404
+from .models import Description, Summary_text, Rating, Editor
 from django.http import HttpResponse
 from .forms import ProgramIdForm, SummarizationForm
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
@@ -154,7 +154,7 @@ def summarize_text(request):
                 summary = tokenizer.decode(output_ids, skip_special_tokens=True)
 
                 # Создаем и сохраняем объект Summary_text в базу данных
-                summary_object = Summary_text(summirize_text=summary, wp_id = description)
+                summary_object = Summary_text(summarize_text=summary, wp_id = description)
                 summary_object.save()
 
     else:
@@ -162,9 +162,38 @@ def summarize_text(request):
 
     return render(request, 'summarization.html', {'form': form,'summary': summary})
 
+#функция, которая обновляет аннотированный текст
+class UpdateSummary(UpdateView):
+    model = Summary_text
+    fields = ['summarize_text']
+    template_name = 'update_summary.html'
+    success_url = '/main'
+
+# функция, которая удаляет аннотированный текст
+class DeleteSummary(DeleteView):
+    model = Summary_text
+    template_name = 'del_summary.html'
+    success_url = '/main'
+
+# функция, которая добавляет оценку тексту
+class RatingCreateView(CreateView):
+    model = Rating
+    fields = ['summarization_id', 'rating_score', 'comment_text', 'author']
+    template_name = 'create_comment.html'
+    success_url = '/main'
+
+# функция, которая позволяет просматривать редакторов описания
+def program_editors(request, work_program_id):
+    # Получаем объект программы работы по ее ID или отображаем ошибку 404, если программа не найдена
+    program = get_object_or_404(Description, pk=work_program_id)
+    
+    # Получаем всех редакторов, связанных с данной программой
+    editors = Editor.objects.filter(work_program_id=program)
+    
+    # Отображаем страницу с информацией о редакторах программы
+    return render(request, 'editors.html', {'editors': editors})
 
 
 
 # функция, которая изменяет описание, если оно изменилось по API, а если нет, то оставляет таким же
-# функция, которая добавляет оценку тексту
 # функция, которая заменяет оригинальный текст описания на реферированный текст
