@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}All descriptions{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-bordered">
+        <thead class="table-info">
+            <tr>
+                <th>rating_id</th>
+                <th>rating_score</th>
+                <th>comment_text</th>
+                <th>author</th>
+                <th>summarization_id</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rating in object_list %}
+            <tr>
+                <td>{{ rating.rating_id }}</td>
+                <td>{{ rating.rating_score }}</td>
+                <td>{{ rating.comment_text }}</td>
+                <td>{{ rating.author }}</td>
+                <td>{{ rating.summarization_id }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

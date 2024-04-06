@@ -1,12 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Description Detail</title>
-</head>
-<body>
-    <h2>Описание рабочей программы из API конструктора</h2>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Description_API{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <h2 class="mt-2">Получение описания рабочей программы из API конструктора</h2>
+      <hr class="mt-0 mb-4">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="description_id" class="form-label">Введите ID рабочей программы:</label>
+          <input type="text" class="form-control" id="description_id" name="description_id">
+        </div>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+          <button type="submit" class="btn btn-success">Отправить</button>
+        </div>
+      </form>
+      {% if error_message %}
+      <div class="alert alert-danger mt-3" role="alert">
+        {{ error_message }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+<!--     
+    <h2></h2>
     <form method="post" action="">
         {% csrf_token %}
         <label for="description_id">Введите ID рабочей программы:</label>
@@ -20,4 +43,4 @@
         <p>{{ description }}</p>
     {% endif %}
 </body>
-</html>
+</html> -->

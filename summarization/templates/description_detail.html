@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Description Detail</title>
-</head>
-<body>
-    <h2>Description Detail</h2>
-    {% if description %}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Description Detail{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-8">
+      <h2 class="mt-2">Полученный текст</h2>
+      <hr class="mt-0 mb-4">
+      {% if description %}
+      <div class="mb-3">
         <p><strong>ID:</strong> {{ description.work_program_id }}</p>
-        <p><strong>Description:</strong> {{ description.description_text }}</p>
-    {% else %}
-        <p>Description not found.</p>
-    {% endif %}
-</body>
-</html>
+        <p><strong>Описание:</strong> {{ description.description_text }}</p>
+      </div>
+      {% else %}
+      <div class="alert alert-danger" role="alert">
+        Описание не найдено
+      </div>
+      {% endif %}
+      <a href="/API/description/" class="btn btn-primary">Назад</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}All summaries{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-bordered">
+        <thead class="table-info">
+            <tr>
+                <th>summarization_id</th>
+                <th>summarize_text</th>
+                <th>work_program_id</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for summary_text in object_list %}
+            <tr>
+                <td>{{ summary_text.summarization_id }}</td>
+                <td>{{ summary_text.summarize_text }}</td>
+                <td>{{ summary_text.wp_id }}</td>
+                <td>
+                    <a href="{% url 'delete_summary' summary_text.pk %}" class="btn btn-danger">Удалить</a>
+                    <a href="{% url 'update_summary' summary_text.pk %}" class="btn btn-success">Редактировать</a>
+                    <a href="{% url 'rating' summary_text.summarization_id %}" class="btn btn-info">Оценить</a>
+                </td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock %}

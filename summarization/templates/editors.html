@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список описаний</title>
-</head>
-<body>
-    <h2>Список описаний</h2>
-    <table border="1">
-        <thead>
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Editors{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-bordered">
+        <thead class="table-info">
             <tr>
                 <th>username</th>
                 <th>last_name</th>
@@ -29,5 +25,4 @@
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+{% endblock %}
